@@ -1,9 +1,10 @@
 package com.springboot.blog.controller;
 
-import com.springboot.blog.dto.PostDto;
-import com.springboot.blog.dto.UpdatePostDto;
-import com.springboot.blog.service.PostService;
-import com.springboot.blog.utils.PostResponse;
+import com.springboot.blog.dto.post.PostDto;
+import com.springboot.blog.dto.post.UpdatePostDto;
+import com.springboot.blog.service.post.IPostService;
+import com.springboot.blog.utils.AppConstants;
+import com.springboot.blog.utils.post.PostResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 @RequestMapping("/api/posts")
 public class PostController {
-    private final PostService postService;
-    public PostController(PostService postService) {
+    private final IPostService postService;
+
+    public PostController(IPostService postService) {
         this.postService = postService;
     }
 
@@ -23,10 +25,10 @@ public class PostController {
 
     @GetMapping
     public PostResponse getAll(
-            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(value = "size", defaultValue = "3", required = false) int size,
-            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sort", defaultValue = "DESC", required = false) String sort) {
+            @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE, required = false) int page,
+            @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_SIZE, required = false) int size,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sort", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sort) {
         return postService.getAll(page, size, sort, sortBy);
     }
 

@@ -1,6 +1,6 @@
-package com.springboot.blog.service;
+package com.springboot.blog.service.post;
 
-import com.springboot.blog.dto.PostDto;
+import com.springboot.blog.dto.post.PostDto;
 import com.springboot.blog.entity.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

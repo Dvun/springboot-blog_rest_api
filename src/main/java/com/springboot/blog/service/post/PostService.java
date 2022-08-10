@@ -1,13 +1,11 @@
-package com.springboot.blog.service.impl;
+package com.springboot.blog.service.post;
 
-import com.springboot.blog.dto.PostDto;
-import com.springboot.blog.dto.UpdatePostDto;
+import com.springboot.blog.dto.post.PostDto;
+import com.springboot.blog.dto.post.UpdatePostDto;
 import com.springboot.blog.entity.Post;
 import com.springboot.blog.exception.ResourceNotFoundException;
 import com.springboot.blog.repository.PostRepository;
-import com.springboot.blog.service.PostMapper;
-import com.springboot.blog.service.PostService;
-import com.springboot.blog.utils.PostResponse;
+import com.springboot.blog.utils.post.PostResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,9 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PostServiceImpl implements PostService {
+public class PostService implements IPostService {
     private final PostRepository postRepository;
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 

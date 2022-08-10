@@ -1,6 +1,6 @@
-package com.springboot.blog.utils;
+package com.springboot.blog.utils.post;
 
-import com.springboot.blog.dto.PostDto;
+import com.springboot.blog.dto.post.PostDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
