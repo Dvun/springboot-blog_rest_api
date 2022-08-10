@@ -12,5 +12,5 @@ public class PostDto {
     private String description;
     private String content;
     private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 }

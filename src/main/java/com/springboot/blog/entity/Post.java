@@ -36,5 +36,5 @@ public class Post {
 
     @UpdateTimestamp
     @Column(name = "updatedAt")
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 }

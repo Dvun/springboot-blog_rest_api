@@ -5,8 +5,6 @@ import com.springboot.blog.entity.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import java.util.List;
-
 @Mapper
 public interface PostMapper {
 
