@@ -73,6 +73,6 @@ public class PostService implements IPostService {
     }
 
     private Post getEntityById(Long id) {
-        return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Comment", "id", id));
+        return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
     }
 }
