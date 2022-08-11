@@ -2,6 +2,7 @@ package com.springboot.blog.controller;
 
 
 import com.springboot.blog.dto.comment.CommentDto;
+import com.springboot.blog.dto.comment.UpdateCommentDto;
 import com.springboot.blog.service.comment.ICommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +36,22 @@ public class CommentController {
             @PathVariable(value = "postId") Long postId,
             @PathVariable(value = "commentId") Long commentId) {
         return new ResponseEntity<>(commentService.getCommentById(postId, commentId), HttpStatus.OK);
+    }
+
+    @PutMapping("/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<CommentDto> update(
+            @PathVariable(value = "commentId") Long commentId,
+            @PathVariable(value = "postId") Long postId,
+            @RequestBody UpdateCommentDto dto) {
+        CommentDto comment = commentService.update(postId, commentId, dto);
+        return new ResponseEntity<>(comment, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<String> delete(
+            @PathVariable(value = "commentId") Long commentId,
+            @PathVariable(value = "postId") Long postId) {
+        commentService.delete(postId, commentId);
+        return new ResponseEntity<>("Comment deleted successfully!", HttpStatus.OK);
     }
 }

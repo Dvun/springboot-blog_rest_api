@@ -4,6 +4,7 @@ import com.springboot.blog.dto.post.PostDto;
 import com.springboot.blog.dto.post.UpdatePostDto;
 import com.springboot.blog.entity.Post;
 import com.springboot.blog.exception.ResourceNotFoundException;
+import com.springboot.blog.repository.CommentRepository;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.utils.post.PostResponse;
 import org.springframework.beans.BeanUtils;
@@ -19,8 +20,11 @@ import java.util.stream.Collectors;
 @Service
 public class PostService implements IPostService {
     private final PostRepository postRepository;
-    public PostService(PostRepository postRepository) {
+    private final CommentRepository commentRepository;
+
+    public PostService(PostRepository postRepository, CommentRepository commentRepository) {
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -64,10 +68,11 @@ public class PostService implements IPostService {
     @Override
     public void delete(Long id) {
         Post post = getEntityById(id);
+        commentRepository.deleteAll(post.getComments());
         postRepository.deleteById(post.getId());
     }
 
     private Post getEntityById(Long id) {
-        return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", id));
+        return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Comment", "id", id));
     }
 }
