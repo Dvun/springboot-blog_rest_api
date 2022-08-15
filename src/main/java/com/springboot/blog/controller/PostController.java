@@ -2,9 +2,10 @@ package com.springboot.blog.controller;
 
 import com.springboot.blog.dto.post.PostDto;
 import com.springboot.blog.dto.post.UpdatePostDto;
-import com.springboot.blog.service.post.IPostService;
+import com.springboot.blog.service.post.PostService;
 import com.springboot.blog.utils.AppConstants;
 import com.springboot.blog.utils.post.PostResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,13 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController()
+@AllArgsConstructor
 @RequestMapping("/api/posts")
 public class PostController {
-    private final IPostService postService;
+    private final PostService postService;
 
-    public PostController(IPostService postService) {
-        this.postService = postService;
-    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -53,4 +52,5 @@ public class PostController {
         postService.delete(id);
         return new ResponseEntity<>("Post deleted successfully!", HttpStatus.OK);
     }
+
 }

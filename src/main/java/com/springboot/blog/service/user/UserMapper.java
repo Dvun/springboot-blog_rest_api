@@ -1,4 +1,4 @@
-package com.springboot.blog.service.auth;
+package com.springboot.blog.service.user;
 
 import com.springboot.blog.dto.user.RegisterDto;
 import com.springboot.blog.entity.User;
