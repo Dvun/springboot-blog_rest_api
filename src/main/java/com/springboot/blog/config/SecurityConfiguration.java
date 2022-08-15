@@ -1,4 +1,4 @@
-package com.springboot.blog.security;
+package com.springboot.blog.config;
 
 
 import com.springboot.blog.security.jwt.AuthTokenFilter;

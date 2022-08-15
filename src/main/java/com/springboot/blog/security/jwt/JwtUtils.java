@@ -27,8 +27,7 @@ public class JwtUtils {
              Jwts.parserBuilder()
                     .setSigningKey(key())
                     .build()
-                     .parse(token)
-                     .getBody();
+                     .parse(token);
              return true;
         } catch (SignatureException ignored) {
 
