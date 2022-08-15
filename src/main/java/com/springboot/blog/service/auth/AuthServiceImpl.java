@@ -6,8 +6,12 @@ import com.springboot.blog.entity.Role;
 import com.springboot.blog.entity.User;
 import com.springboot.blog.repository.RoleRepository;
 import com.springboot.blog.repository.UserRepository;
+import com.springboot.blog.security.jwt.JwtUtils;
+import com.springboot.blog.security.service.UserDetailsImpl;
+import com.springboot.blog.utils.JwtResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,15 +33,19 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
+    JwtUtils jwtUtils;
+
 
     @Override
     public ResponseEntity<?> login(LoginDto dto) {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getUsernameOrEmail(), dto.getPassword())
         );
-        User user = (User) auth.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(auth);
-        return new ResponseEntity<>("Logged in!", HttpStatus.OK);
+        String token = jwtUtils.generateJwtToken(auth);
+        UserDetailsImpl principal = (UserDetailsImpl) auth.getPrincipal();
+        return new ResponseEntity<>(new JwtResponse(token, principal.getUsername(), principal.getEmail()), HttpStatus.OK);
     }
 
     @Override

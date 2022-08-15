@@ -1,7 +1,6 @@
 package com.springboot.blog.entity;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,7 +12,6 @@ import java.util.Set;
 
 @Setter
 @Getter
-@RequiredArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
