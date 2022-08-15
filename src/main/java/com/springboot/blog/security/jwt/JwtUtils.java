@@ -1,9 +1,6 @@
 package com.springboot.blog.security.jwt;
 
 import com.springboot.blog.security.service.UserDetailsImpl;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -53,12 +50,12 @@ public class JwtUtils {
                 .compact();
     }
 
-
-    public Jwt<Header, Claims> getUserNameFromJwtToken(String token) {
+    public String getUsernameFromJWT(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
-                .parse(token);
+                .parseClaimsJws(token)
+                .getBody().get("username").toString();
     }
 
     private Key key() {
