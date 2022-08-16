@@ -10,11 +10,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -24,15 +24,12 @@ public class SecurityConfiguration {
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-                .antMatchers("/api/auth/login").permitAll()
-                .antMatchers("/api/auth/register").permitAll()
-                .anyRequest()
-                .authenticated();
+                .antMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .csrf().csrfTokenRepository(new CookieCsrfTokenRepository());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

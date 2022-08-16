@@ -17,10 +17,10 @@ public class SpringbootBlogRestApiApplication {
     @Bean
     CommandLineRunner run(AuthService authService) {
         return args -> {
-            if (authService.findByRole("ROLE_ADMIN") == null) {
+            if (authService.findByRole("ROLE_ADMIN").isEmpty()) {
                 authService.createRole(new Role(null, "ROLE_ADMIN"));
             }
-            if (authService.findByRole("ROLE_USER") == null) {
+            if (authService.findByRole("ROLE_USER").isEmpty()) {
                 authService.createRole(new Role(null, "ROLE_USER"));
             }
         };

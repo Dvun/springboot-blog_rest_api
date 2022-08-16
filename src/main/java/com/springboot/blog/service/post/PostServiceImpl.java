@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public PostDto create(PostDto dto) {
         findByTitle(dto.getTitle());
         Post post = new Post();
@@ -59,6 +61,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public PostDto update(Long id, UpdatePostDto dto) {
         findByTitle(dto.getTitle());
         Post post = getEntityById(id);
@@ -71,6 +74,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(Long id) {
         Post post = getEntityById(id);
         commentRepository.deleteAll(post.getComments());

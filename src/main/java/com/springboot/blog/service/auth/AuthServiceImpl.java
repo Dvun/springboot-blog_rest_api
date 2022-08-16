@@ -11,7 +11,6 @@ import com.springboot.blog.security.service.UserDetailsImpl;
 import com.springboot.blog.utils.JwtResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -32,9 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
 
     @Override
@@ -50,10 +48,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> register(RegisterDto dto) {
-        if (userRepository.existsByEmail(dto.getEmail())) {
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             return new ResponseEntity<>("Email is already registered!", HttpStatus.BAD_REQUEST);
         }
-        if (userRepository.existsByEmail(dto.getUsername())) {
+        if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
             return new ResponseEntity<>("Username is already registered!", HttpStatus.BAD_REQUEST);
         }
 
@@ -72,8 +70,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Role findByRole(String roleType) {
-        return roleRepository.findByRole(roleType).orElse(null);
+    public Optional<Role> findByRole(String roleType) {
+        return roleRepository.findByRole(roleType);
     }
 
     @Override

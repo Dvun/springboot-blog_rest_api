@@ -1,6 +1,6 @@
 package com.springboot.blog.security.jwt;
 
-import com.springboot.blog.security.service.UserDetailsService;
+import com.springboot.blog.security.service.UserDetailsServiceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
 
     @Override
@@ -45,7 +45,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Gagal: {}", e.getMessage());
+            logger.error("Error: {}", e.getMessage());
         }
         filterChain.doFilter(request, response);
     }
