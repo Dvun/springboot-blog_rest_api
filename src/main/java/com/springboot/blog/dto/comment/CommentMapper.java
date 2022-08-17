@@ -1,7 +1,6 @@
-package com.springboot.blog.service.comment;
+package com.springboot.blog.dto.comment;
 
 
-import com.springboot.blog.dto.comment.CommentDto;
 import com.springboot.blog.entity.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

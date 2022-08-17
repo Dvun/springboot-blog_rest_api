@@ -3,9 +3,8 @@ package com.springboot.blog.dto.user;
 import com.springboot.blog.entity.Role;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 public class UserDto {
@@ -15,8 +14,10 @@ public class UserDto {
     private String lastname;
     private String email;
     private String username;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private Set<Role> roles = new HashSet<>();
+    private Set<String> roles;
 
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles.stream().map(Role::getRole).collect(Collectors.toSet());
+    }
 }

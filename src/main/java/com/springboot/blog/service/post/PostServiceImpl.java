@@ -1,6 +1,7 @@
 package com.springboot.blog.service.post;
 
 import com.springboot.blog.dto.post.PostDto;
+import com.springboot.blog.dto.post.PostMapper;
 import com.springboot.blog.dto.post.UpdatePostDto;
 import com.springboot.blog.entity.Post;
 import com.springboot.blog.exception.BlogApiException;

@@ -2,12 +2,14 @@ package com.springboot.blog.service.auth;
 
 import com.springboot.blog.dto.user.LoginDto;
 import com.springboot.blog.dto.user.RegisterDto;
+import com.springboot.blog.dto.user.UserDto;
 import com.springboot.blog.entity.Role;
 import com.springboot.blog.entity.User;
 import com.springboot.blog.repository.RoleRepository;
 import com.springboot.blog.repository.UserRepository;
 import com.springboot.blog.security.jwt.JwtUtils;
 import com.springboot.blog.security.service.UserDetailsImpl;
+import com.springboot.blog.dto.user.UserMapper;
 import com.springboot.blog.utils.JwtResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -43,7 +45,8 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(auth);
         String token = jwtUtils.generateJwtToken(auth);
         UserDetailsImpl principal = (UserDetailsImpl) auth.getPrincipal();
-        return new ResponseEntity<>(new JwtResponse(token, principal.getUsername(), principal.getEmail()), HttpStatus.OK);
+        UserDto user = UserMapper.INSTANCE.userDetailsToUserDto(principal);
+        return new ResponseEntity<>(new JwtResponse(token, user), HttpStatus.OK);
     }
 
     @Override

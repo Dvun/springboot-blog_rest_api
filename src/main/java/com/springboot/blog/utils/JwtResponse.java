@@ -1,5 +1,6 @@
 package com.springboot.blog.utils;
 
+import com.springboot.blog.dto.user.UserDto;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -7,13 +8,11 @@ import java.io.Serializable;
 @Data
 public class JwtResponse implements Serializable {
 
+    private UserDto user;
     private String token;
-    private String username;
-    private String email;
 
-    public JwtResponse(String token, String username, String email) {
+    public JwtResponse(String token, UserDto user) {
         this.token = token;
-        this.username = username;
-        this.email = email;
+        this.user = user;
     }
 }

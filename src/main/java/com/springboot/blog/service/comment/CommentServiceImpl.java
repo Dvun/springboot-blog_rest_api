@@ -2,6 +2,7 @@ package com.springboot.blog.service.comment;
 
 
 import com.springboot.blog.dto.comment.CommentDto;
+import com.springboot.blog.dto.comment.CommentMapper;
 import com.springboot.blog.dto.comment.UpdateCommentDto;
 import com.springboot.blog.entity.Comment;
 import com.springboot.blog.entity.Post;
