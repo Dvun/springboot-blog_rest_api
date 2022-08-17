@@ -11,7 +11,6 @@ import com.springboot.blog.repository.CommentRepository;
 import com.springboot.blog.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
         Post post = getPostById(postId);
         Comment comment = getCommentById(commentId);
         if (!comment.getPost().getId().equals(post.getId())) {
-            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment does not belong to post!");
+            throw new BlogApiException("Comment does not belong to post!");
         }
         return CommentMapper.INSTANCE.entityToDto(comment);
     }
@@ -54,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = getCommentById(commentId);
         Post post = getPostById(postId);
         if (!comment.getPost().getId().equals(post.getId())) {
-            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment does not belong to post!");
+            throw new BlogApiException("Comment does not belong to post!");
         }
         BeanUtils.copyProperties(dto, comment);
         commentRepository.save(comment);
@@ -66,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
         Post post = getPostById(postId);
         Comment comment = getCommentById(commentId);
         if (!comment.getPost().getId().equals(post.getId())) {
-            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Comment does not belong to post!");
+            throw new BlogApiException("Comment does not belong to post!");
         }
         commentRepository.deleteById(commentId);
     }

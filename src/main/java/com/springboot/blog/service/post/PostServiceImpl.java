@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +65,7 @@ public class PostServiceImpl implements PostService {
         findByTitle(dto.getTitle());
         Post post = getEntityById(id);
         if (post.getTitle().equals(dto.getTitle())) {
-            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Title already exist! Think new one.");
+            throw new BlogApiException("Title already exist! Think new one.");
         }
         BeanUtils.copyProperties(dto, post);
         postRepository.save(post);
@@ -87,10 +86,8 @@ public class PostServiceImpl implements PostService {
     }
 
     private void findByTitle(String title) {
-        Post existPost = postRepository.findByTitle(title);
-        if (existPost != null) {
-            throw new BlogApiException(HttpStatus.BAD_REQUEST, "Title already exist! Think new one.");
-        }
+        if (postRepository.findByTitle(title).isPresent())
+            throw new BlogApiException("Title already exist! Think new one.");
     }
 
 }
