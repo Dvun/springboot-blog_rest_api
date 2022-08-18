@@ -1,11 +1,13 @@
 package com.springboot.blog.utils;
 
 import com.springboot.blog.dto.user.UserDto;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 public class JwtResponse implements Serializable {
 
     private UserDto user;

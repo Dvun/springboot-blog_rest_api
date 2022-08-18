@@ -3,13 +3,13 @@ package com.springboot.blog.service.auth;
 import com.springboot.blog.dto.user.LoginDto;
 import com.springboot.blog.dto.user.RegisterDto;
 import com.springboot.blog.dto.user.UserDto;
+import com.springboot.blog.dto.user.UserMapper;
 import com.springboot.blog.entity.Role;
 import com.springboot.blog.entity.User;
 import com.springboot.blog.repository.RoleRepository;
 import com.springboot.blog.repository.UserRepository;
 import com.springboot.blog.security.jwt.JwtUtils;
 import com.springboot.blog.security.service.UserDetailsImpl;
-import com.springboot.blog.dto.user.UserMapper;
 import com.springboot.blog.utils.JwtResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -61,8 +63,7 @@ public class AuthServiceImpl implements AuthService {
         User user = new User();
         BeanUtils.copyProperties(dto, user);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        Role role = roleRepository.findByRole("ROLE_USER").orElse(null);
-        user.setRoles(Collections.singleton(role));
+        addRolesToUser(user);
         userRepository.save(user);
         return new ResponseEntity<>("User registered!", HttpStatus.CREATED);
     }
@@ -84,6 +85,13 @@ public class AuthServiceImpl implements AuthService {
         );
         Role role = roleRepository.findByRole(roleType).orElse(null);
         user.setRoles(Collections.singleton(role));
+    }
+
+
+    private void addRolesToUser(User user) {
+        Set<Role> roleArr = new HashSet<>();
+        roleArr.add(roleRepository.findByRole("ROLE_USER").orElse(null));
+        user.setRoles(new HashSet<>(roleArr));
     }
 
 }

@@ -1,7 +1,11 @@
 package com.springboot.blog.security.jwt;
 
+import com.springboot.blog.exception.BlogApiException;
 import com.springboot.blog.security.service.UserDetailsImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -26,13 +30,21 @@ public class JwtUtils {
         try {
              Jwts.parserBuilder()
                     .setSigningKey(key())
+                     .requireIssuer("springboot_rest_api")
                     .build()
                      .parse(token);
              return true;
-        } catch (SignatureException ignored) {
-
+        } catch (SignatureException ex) {
+            throw new BlogApiException("Invalid Jwt signature");
+        } catch (MalformedJwtException ex) {
+            throw new BlogApiException("Invalid Jwt token");
+        } catch (ExpiredJwtException ex) {
+            throw new BlogApiException("Expired Jwt token");
+        } catch (UnsupportedJwtException ex) {
+            throw new BlogApiException("Unsupported Jwt token");
+        } catch (IllegalArgumentException ex) {
+            throw new BlogApiException("Jwt claims string is empty");
         }
-        return false;
     }
 
     public String generateJwtToken(Authentication authentication) {
@@ -43,6 +55,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .claim("username", principal.getUsername())
                 .claim("email", principal.getEmail())
+                .setIssuer("springboot_rest_api")
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
                 .signWith(key())
@@ -54,7 +67,7 @@ public class JwtUtils {
                 .setSigningKey(key())
                 .build()
                 .parseClaimsJws(token)
-                .getBody().get("username").toString();
+                .getBody().get("email").toString();
     }
 
     private Key key() {
