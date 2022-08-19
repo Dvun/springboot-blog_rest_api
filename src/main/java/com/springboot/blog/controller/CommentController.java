@@ -4,6 +4,8 @@ package com.springboot.blog.controller;
 import com.springboot.blog.dto.comment.CommentDto;
 import com.springboot.blog.dto.comment.UpdateCommentDto;
 import com.springboot.blog.service.comment.CommentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Comment")
 public class CommentController {
     private final CommentService commentService;
 
@@ -22,6 +25,7 @@ public class CommentController {
 
 
     @PostMapping("/posts/{postId}/comments")
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<CommentDto> create(@PathVariable(value = "postId") Long postId, @Valid @RequestBody CommentDto dto) {
         CommentDto comment = commentService.create(postId, dto);
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
@@ -40,6 +44,7 @@ public class CommentController {
     }
 
     @PutMapping("/posts/{postId}/comments/{commentId}")
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<CommentDto> update(
             @PathVariable(value = "commentId") Long commentId,
             @PathVariable(value = "postId") Long postId,
@@ -49,6 +54,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/posts/{postId}/comments/{commentId}")
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<String> delete(
             @PathVariable(value = "commentId") Long commentId,
             @PathVariable(value = "postId") Long postId) {

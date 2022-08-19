@@ -12,6 +12,7 @@ import com.springboot.blog.repository.CommentRepository;
 import com.springboot.blog.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public CommentDto create(Long postId, CommentDto dto) {
         Post post = getPostById(postId);
         Comment comment = CommentMapper.INSTANCE.dtoToEntity(dto);
@@ -50,6 +52,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public CommentDto update(Long postId, Long commentId, UpdateCommentDto dto) {
         Comment comment = getCommentById(commentId);
         Post post = getPostById(postId);
@@ -62,6 +65,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(Long postId, Long commentId) {
         Post post = getPostById(postId);
         Comment comment = getCommentById(commentId);

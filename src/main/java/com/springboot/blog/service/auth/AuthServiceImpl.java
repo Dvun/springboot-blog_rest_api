@@ -1,16 +1,14 @@
 package com.springboot.blog.service.auth;
 
-import com.springboot.blog.dto.user.LoginDto;
-import com.springboot.blog.dto.user.RegisterDto;
-import com.springboot.blog.dto.user.UserDto;
-import com.springboot.blog.dto.user.UserMapper;
+import com.springboot.blog.dto.auth.LoginDto;
+import com.springboot.blog.dto.auth.LoginResponseDto;
+import com.springboot.blog.dto.user.*;
 import com.springboot.blog.entity.Role;
 import com.springboot.blog.entity.User;
 import com.springboot.blog.repository.RoleRepository;
 import com.springboot.blog.repository.UserRepository;
 import com.springboot.blog.security.jwt.JwtUtils;
 import com.springboot.blog.security.service.UserDetailsImpl;
-import com.springboot.blog.utils.JwtResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -40,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public ResponseEntity<?> login(LoginDto dto) {
+    public ResponseEntity<LoginResponseDto> login(LoginDto dto) {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getUsernameOrEmail(), dto.getPassword())
         );
@@ -48,11 +46,11 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtUtils.generateJwtToken(auth);
         UserDetailsImpl principal = (UserDetailsImpl) auth.getPrincipal();
         UserDto user = UserMapper.INSTANCE.userDetailsToUserDto(principal);
-        return new ResponseEntity<>(new JwtResponse(token, user), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponseDto(user, token), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> register(RegisterDto dto) {
+    public ResponseEntity<String> register(RegisterDto dto) {
         if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             return new ResponseEntity<>("Email is already registered!", HttpStatus.BAD_REQUEST);
         }

@@ -1,4 +1,4 @@
-package com.springboot.blog.dto.user;
+package com.springboot.blog.dto.auth;
 
 import lombok.Data;
 

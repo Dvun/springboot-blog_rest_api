@@ -1,4 +1,4 @@
-package com.springboot.blog.utils.post;
+package com.springboot.blog.dto.post;
 
 import com.springboot.blog.dto.post.PostDto;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class PostResponse {
+public class PostResponseDto {
 
     private List<PostDto> content;
     private int page;

@@ -3,6 +3,9 @@ package com.springboot.blog.config;
 
 import com.springboot.blog.security.jwt.JwtAuthEntryPoint;
 import com.springboot.blog.security.jwt.JwtAuthFilter;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@SecurityScheme(name = "Authorization", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class SecurityConfiguration {
 
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
@@ -33,17 +37,17 @@ public class SecurityConfiguration {
         http
 //                .csrf().csrfTokenRepository(new CookieCsrfTokenRepository())
                 .csrf().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthEntryPoint)
+                .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-                .antMatchers("/api/auth/login", "/api/auth/register").permitAll()
-                .anyRequest().authenticated();
-        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                .authorizeRequests(auth -> auth
+                        .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .antMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                        .antMatchers("/v3/api-docs/**").permitAll()
+                        .antMatchers("/swagger-ui/**").permitAll()
+                        .anyRequest().authenticated());
+        return http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean

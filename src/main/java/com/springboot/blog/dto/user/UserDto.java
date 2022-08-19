@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Data
 public class UserDto {
 
@@ -20,4 +21,5 @@ public class UserDto {
     public void setRoles(Set<Role> roles) {
         this.roles = roles.stream().map(Role::getRole).collect(Collectors.toSet());
     }
+
 }
