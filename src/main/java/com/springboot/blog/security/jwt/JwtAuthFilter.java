@@ -1,5 +1,6 @@
 package com.springboot.blog.security.jwt;
 
+import com.springboot.blog.exception.BlogApiException;
 import com.springboot.blog.security.service.UserDetailsServiceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -46,11 +49,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            filterChain.doFilter(request, response);
         } catch (AccessDeniedException ex) {
-            throw new AccessDeniedException(ex.getMessage());
+            throw new BlogApiException(ex.getMessage());
         }
-        filterChain.doFilter(request, response);
     }
+
+
 
 
     private String parseJwt(HttpServletRequest request) {
